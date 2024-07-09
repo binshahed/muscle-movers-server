@@ -10,10 +10,12 @@ const router = Router();
 router
   .route('/')
   .post(
-    // auth('user'),
+    auth('user'),
     validateRequest(orderValidation.createOrderValidationSchema),
     orderController.createOrder,
   )
-  .get();
+  .get(auth('admin'), orderController.getAllOrders);
+
+router.route('/my-order').get(auth('user'), orderController.getMyOrder);
 
 export const orderRouter = router;

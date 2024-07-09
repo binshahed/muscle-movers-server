@@ -84,6 +84,32 @@ const createOrder = async (payload: TOrder) => {
   }
 };
 
+const getAllOrder = async () => {
+  const orders = await OrderModel.find({});
+
+  if (orders.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+
+  return orders;
+};
+
+const getMyOrder = async (userId: string) => {
+  const user = UserModel.findById(userId);
+  if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  const orders = await OrderModel.find({ user: userId });
+
+  if (orders.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  return orders;
+};
+
 export const orderService = {
   createOrder,
+  getAllOrder,
+  getMyOrder,
 };
