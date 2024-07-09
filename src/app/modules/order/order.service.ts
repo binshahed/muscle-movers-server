@@ -4,9 +4,10 @@ import { UserModel } from '../auth/auth.model';
 import { TOrder } from './order.interface';
 import AppError from '../../errors/AppError';
 import { ProductModel } from '../product/product.model';
-import { discountCalculator } from '../../../utils/dicscountCalculatior';
+
 import mongoose from 'mongoose';
 import { OrderModel } from './order.model';
+import { discountCalculator } from '../../../utils/discountCalculator';
 
 const createOrder = async (payload: TOrder) => {
   const { user: userId, products, deliveryAddress, paymentMethod } = payload;
