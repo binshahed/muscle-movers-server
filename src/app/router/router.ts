@@ -1,10 +1,30 @@
 import { Application, Request, Response } from 'express';
+import { productRouter } from '../modules/product/product.routes';
 import { authRoutes } from '../modules/auth/auth.routes';
+import { brandRouter } from '../modules/brand/brand.routes';
+import { categoryRouter } from '../modules/category/category.routes';
+import { orderRouter } from '../modules/order/order.routes';
 
 const modulesRouters = [
   {
     path: '/api/auth',
     route: authRoutes,
+  },
+  {
+    path: '/api/products',
+    route: productRouter,
+  },
+  {
+    path: '/api/brand',
+    route: brandRouter,
+  },
+  {
+    path: '/api/category',
+    route: categoryRouter,
+  },
+  {
+    path: '/api/order',
+    route: orderRouter,
   },
 ];
 
