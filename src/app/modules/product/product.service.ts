@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProductModel } from './product.model';
 import { TProduct } from './product.interface';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { CategoryModel } from '../category/category.model';
 import { BrandModel } from '../brand/brand.model';
+import { Request } from 'express';
 
 const createProduct = async (payload: TProduct) => {
   const category = CategoryModel.findById(payload.category);
@@ -23,11 +25,43 @@ const createProduct = async (payload: TProduct) => {
   return product;
 };
 
-const getAllProducts = async () => {
-  const products = await ProductModel.find({}).populate([
-    { path: 'category', select: '_id name' },
-    { path: 'brand', select: '_id name' },
-  ]);
+const getAllProducts = async (req: Request) => {
+  const order = req?.query?.order === 'desc' ? -1 : 1;
+  const sortBy = req?.query?.sortBy ? (req?.query?.sortBy as string) : '_id';
+  const limit = req?.query?.limit ? Number(req?.query?.limit) : 10;
+  const skip = Number(req?.query.skip) || 0;
+
+  // filter
+  const filters = req?.body;
+  const args: any = {};
+
+  for (const key in filters) {
+    if (filters[key].length > 0) {
+      if (key === 'price') {
+        args['price'] = {
+          $gte: filters['price'][0],
+          $lte: filters['price'][1],
+        };
+      }
+      if (key === 'category') {
+        args['category'] = { $in: filters['category'] };
+      }
+      if (key === 'brand') {
+        args['brand'] = { $in: filters['brand'] };
+      }
+    }
+  }
+
+  const products = await ProductModel.find(args)
+    .select({ photoUrl: 0 })
+    .sort({ [sortBy]: order })
+    .skip(skip)
+    .limit(limit)
+    .populate([
+      { path: 'category', select: '_id name' },
+      { path: 'brand', select: '_id name' },
+    ]);
+
   if (products.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'Product not found');
   }
