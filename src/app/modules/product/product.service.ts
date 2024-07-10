@@ -53,7 +53,6 @@ const getAllProducts = async (req: Request) => {
   }
 
   const products = await ProductModel.find(args)
-    .select({ photoUrl: 0 })
     .sort({ [sortBy]: order })
     .skip(skip)
     .limit(limit)

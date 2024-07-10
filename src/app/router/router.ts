@@ -31,7 +31,7 @@ const modulesRouters = [
 export const routes = (app: Application) => {
   // root route
   app.get('/', (req: Request, res: Response) => {
-    res.send('Orion fitness shopping');
+    res.send('Muscle Movers Shopping');
   });
 
   // all routes

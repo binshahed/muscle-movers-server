@@ -26,7 +26,7 @@ const userSchema = new Schema<TUser, TUserModel>(
     phone: {
       type: String,
       required: [true, 'Phone number is required'],
-      match: [/^\d{10}$/, 'Phone number must be 10 digits long'],
+      min: [10, 'Phone number must be at least 1 character long'],
     },
     role: {
       type: String,
