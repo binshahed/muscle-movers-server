@@ -6,6 +6,7 @@ import httpStatus from 'http-status';
 import { CategoryModel } from '../category/category.model';
 import { BrandModel } from '../brand/brand.model';
 import { Request } from 'express';
+import { SortOrder } from 'mongoose';
 
 const createProduct = async (payload: TProduct) => {
   const category = CategoryModel.findById(payload.category);
@@ -27,9 +28,11 @@ const createProduct = async (payload: TProduct) => {
 
 const getAllProducts = async (req: Request) => {
   const order = req?.query?.order === 'desc' ? -1 : 1;
-  const sortBy = req?.query?.sortBy ? (req?.query?.sortBy as string) : '_id';
-  const limit = req?.query?.limit ? Number(req?.query?.limit) : 10;
-  const skip = Number(req?.query.skip) || 0;
+  const sortBy = req?.query?.sortBy
+    ? (req?.query?.sortBy as string | number)
+    : '_id';
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+  const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
 
   // filter
   const filters = req?.body;
@@ -52,8 +55,10 @@ const getAllProducts = async (req: Request) => {
     }
   }
 
+  const totalProducts = await ProductModel.find().countDocuments();
+
   const products = await ProductModel.find(args)
-    .sort({ [sortBy]: order })
+    .sort({ [sortBy]: order as SortOrder })
     .skip(skip)
     .limit(limit)
     .populate([
@@ -61,11 +66,11 @@ const getAllProducts = async (req: Request) => {
       { path: 'brand', select: '_id name' },
     ]);
 
-  if (products.length === 0) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Product not found');
-  }
+  // if (products.length === 0) {
+  //   throw new AppError(httpStatus.NOT_FOUND, 'Product not found');
+  // }
 
-  return products;
+  return { products, totalProducts };
 };
 
 const getProductById = async (productId: string) => {

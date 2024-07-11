@@ -7,14 +7,7 @@ import auth from '../../middlewares/auth';
 
 const router = Router();
 
-router
-  .route('/')
-  .post(
-    auth('admin'),
-    validateRequest(productValidation.createProductValidationSchema),
-    productController.createProduct,
-  )
-  .get(productController.getAllProducts);
+router.route('/').post(productController.getAllProducts);
 
 router
   .route('/:id')
@@ -25,5 +18,13 @@ router
     productController.updateProductById,
   )
   .delete(auth('admin'), productController.deleteProductById);
+
+router
+  .route('/create-product')
+  .post(
+    auth('admin'),
+    validateRequest(productValidation.createProductValidationSchema),
+    productController.createProduct,
+  );
 
 export const productRouter = router;
