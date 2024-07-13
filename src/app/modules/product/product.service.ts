@@ -38,7 +38,7 @@ const getAllProducts = async (req: Request) => {
   const filters = req?.body;
   const args: any = {};
 
-  console.log(filters);
+
 
   for (const key in filters) {
     if (filters[key].length > 0) {
