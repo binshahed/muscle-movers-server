@@ -29,7 +29,7 @@ Muscle Movers Backend provides the necessary APIs and server functionality to su
 
 ### Prerequisites
 
-- Node.js (version >= 12.0.0)
+
 - MongoDB
 
 ### Installation Steps
