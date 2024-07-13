@@ -11,7 +11,7 @@ const router = Router();
 router
   .route('/')
   .post(
-    auth('admin'),
+    auth(),
     validateRequest(brandValidation.createBrandValidationSchema),
     brandController.createBrand,
   )
@@ -21,10 +21,10 @@ router
   .route('/:id')
   .get(brandController.getBrandById)
   .put(
-    auth('admin'),
+    auth(),
     validateRequest(brandValidation.updateBrandValidationSchema),
     brandController.updateBrandById,
   )
-  .delete(auth('admin'), brandController.deleteBrandById);
+  .delete(auth(), brandController.deleteBrandById);
 
 export const brandRouter = router;

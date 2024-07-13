@@ -10,11 +10,11 @@ const router = Router();
 router
   .route('/')
   .post(
-    auth('user'),
+    auth(),
     validateRequest(orderValidation.createOrderValidationSchema),
     orderController.createOrder,
   )
-  .get(auth('admin'), orderController.getAllOrders);
+  .get(auth(), orderController.getAllOrders);
 
 router.route('/my-order').get(auth('user'), orderController.getMyOrder);
 

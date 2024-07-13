@@ -34,7 +34,6 @@ const getAllProducts = async (req: Request) => {
   const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
   const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
 
-
   // filter
   const filters = req?.body;
   const args: any = {};
@@ -130,6 +129,14 @@ const deleteProductById = async (productId: string) => {
   const deleteProduct = await ProductModel.findByIdAndDelete(productId);
   return deleteProduct;
 };
+const getProducts = () => {
+  return ProductModel.find()
+    .sort({ createdAt: -1 })
+    .populate([
+      { path: 'category', select: '_id name' },
+      { path: 'brand', select: '_id name' },
+    ]);
+};
 
 export const productService = {
   createProduct,
@@ -137,4 +144,5 @@ export const productService = {
   getProductById,
   deleteProductById,
   updateProductById,
+  getProducts,
 };

@@ -11,7 +11,7 @@ const router = Router();
 router
   .route('/')
   .post(
-    auth('admin'),
+    auth(),
     validateRequest(categoryValidation.createCategoryValidationSchema),
     categoryController.createCategory,
   )
@@ -21,10 +21,10 @@ router
   .route('/:id')
   .get(categoryController.getCategoryById)
   .put(
-    auth('admin'),
+    auth(),
     validateRequest(categoryValidation.updateCategoryValidationSchema),
     categoryController.updateCategoryById,
   )
-  .delete(auth('admin'), categoryController.deleteCategoryById);
+  .delete(auth(), categoryController.deleteCategoryById);
 
 export const categoryRouter = router;
