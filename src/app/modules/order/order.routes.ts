@@ -16,6 +16,6 @@ router
   )
   .get(auth(), orderController.getAllOrders);
 
-router.route('/my-order').get(auth('user'), orderController.getMyOrder);
+router.route('/my-order').get(auth(), orderController.getMyOrder);
 
 export const orderRouter = router;
