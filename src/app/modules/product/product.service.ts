@@ -31,14 +31,12 @@ const getAllProducts = async (req: Request) => {
   const sortBy = req?.query?.sortBy
     ? (req?.query?.sortBy as string | number)
     : '_id';
-  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-  const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
+  // const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
+  // const skip = req.query.skip ? parseInt(req.query.skip as string) : 0;
 
   // filter
   const filters = req?.body;
   const args: any = {};
-
-
 
   for (const key in filters) {
     if (filters[key].length > 0) {
@@ -64,8 +62,6 @@ const getAllProducts = async (req: Request) => {
 
   const products = await ProductModel.find(args)
     .sort({ [sortBy]: order as SortOrder })
-    .skip(skip)
-    .limit(limit)
     .populate([
       { path: 'category', select: '_id name' },
       { path: 'brand', select: '_id name' },
